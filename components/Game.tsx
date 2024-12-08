@@ -180,7 +180,7 @@ const Game = () => {
         y: birdY.value + 24,
       };
 
-      if (currentValue > height - 55 - Math.max(bottom, 60)) {
+      if (currentValue > height - 55 - Math.max(bottom, 20)) {
         gameOver.value = true;
         runOnJS(setIsGameOver)(true);
       }
@@ -289,7 +289,7 @@ const Game = () => {
             image={base}
             width={width}
             height={150}
-            y={height - 55 - Math.max(bottom, 60)}
+            y={height - 55 - Math.max(bottom, 20)}
             x={0}
             fit={'cover'}
           />
