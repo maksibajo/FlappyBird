@@ -113,7 +113,6 @@ const Game = () => {
       h: pipeHeight,
       w: pipeWidth,
     },
-    // top pipe
     {
       x: pipeX.value,
       y: topPipeY.value,
@@ -135,13 +134,11 @@ const Game = () => {
     }, delay);
   };
 
-  // Scoring system
   useAnimatedReaction(
     () => pipeX.value,
     (currentValue, previousValue) => {
       const middle = birdX;
 
-      // change offset for the position of the next gap
       if (previousValue && currentValue < -100 && previousValue > -100) {
         pipeOffset.value =
           Math.floor(Math.random() * (MAX_INTERVAL - MIN_INTERVAL + 1)) +
@@ -156,7 +153,6 @@ const Game = () => {
         currentValue <= middle &&
         previousValue > middle
       ) {
-        // do something ✨
         runOnJS(setScore)(score + 1);
       }
     },
@@ -169,14 +165,13 @@ const Game = () => {
     'worklet';
 
     return (
-      point.x + 20 >= rect.x && // right of the left edge AND
-      point.x <= rect.x + rect.w && // left of the right edge AND
-      point.y + 20 >= rect.y && // below the top AND
-      point.y - 20 <= rect.y + rect.h // above the bottom
+      point.x + 20 >= rect.x &&
+      point.x <= rect.x + rect.w &&
+      point.y + 20 >= rect.y &&
+      point.y - 20 <= rect.y + rect.h
     );
   };
 
-  // Collision detection
   useAnimatedReaction(
     () => birdY.value,
     (currentValue: number) => {
@@ -185,8 +180,7 @@ const Game = () => {
         y: birdY.value + 24,
       };
 
-      // Ground collision detection
-      if (currentValue > height - 110) {
+      if (currentValue > height - 55 - Math.max(bottom, 60)) {
         gameOver.value = true;
         runOnJS(setIsGameOver)(true);
       }
@@ -276,10 +270,7 @@ const Game = () => {
       )}
       <GestureDetector gesture={gesture}>
         <Canvas style={{width, height}}>
-          {/* BG */}
           <Image image={bg} width={width} height={height} fit={'cover'} />
-
-          {/* Pipes */}
           <Image
             image={pipeTop}
             y={topPipeY}
@@ -294,18 +285,14 @@ const Game = () => {
             width={pipeWidth}
             height={pipeHeight}
           />
-
-          {/* Base */}
           <Image
             image={base}
             width={width}
             height={150}
-            y={height - 55 - bottom}
+            y={height - 55 - Math.max(bottom, 60)}
             x={0}
             fit={'cover'}
           />
-
-          {/* Bird */}
           <Bird
             isGameOver={isGameOver}
             birdX={birdX}
@@ -313,8 +300,6 @@ const Game = () => {
             birdYVelocity={birdYVelocity}
             width={width}
           />
-
-          {/* Score */}
           <TextBlob
             blob={Skia.TextBlob.MakeFromText(score.toString(), font)}
             x={width / 2 - 20}
